@@ -1,0 +1,22 @@
+/bin/
+/coverage.out
+/.cache/
+.DS_Store
+/.settlelab/
+*.key
+__pycache__/
+/.settlelab-bft/
+
+# Local credentials and environment configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+
+# Generated evidence may contain local machine metadata; regenerate with make.
+/reports/
+
+# Keep the active workflow local until GitHub workflow permission is granted.
+/.github/workflows/ci.yml
