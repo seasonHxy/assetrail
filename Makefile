@@ -1,4 +1,5 @@
 .PHONY: demo test check build smoke smoke-network evidence benchmark confirmation consensus-demo consensus-evidence smoke-bft bft-evidence
+.DEFAULT_GOAL := assetrail-demo
 
 GO ?= go
 TEST_FLAGS ?=
@@ -50,3 +51,18 @@ smoke-bft: build
 	python3 scripts/smoke_bft.py
 
 bft-evidence: smoke-bft
+
+.PHONY: assetrail-build assetrail-test assetrail-demo
+assetrail-build:
+	$(GO) build $(GO_LINK_FLAGS) -o bin/assetrail ./cmd/assetrail
+ifeq ($(shell $(GO) env GOHOSTOS),darwin)
+	codesign --force --sign - bin/assetrail
+endif
+	forge build --root contracts --quiet
+
+assetrail-test:
+	$(GO) test -race $(TEST_FLAGS) $(GO_LINK_FLAGS) ./rollup ./cmd/assetrail
+	forge test --root contracts -vv
+
+assetrail-demo: assetrail-build
+	python3 scripts/assetrail_demo.py

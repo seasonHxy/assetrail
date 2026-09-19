@@ -1,4 +1,4 @@
-name: Go
+name: AssetRail
 on: [push, pull_request]
 permissions:
   contents: read
@@ -11,9 +11,15 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.8.1
       - run: test -z "$(gofmt -l .)"
       - run: go vet ./...
       - run: go test -race ./...
+      - run: forge fmt --root contracts --check
+      - run: forge test --root contracts -vv
+      - run: make assetrail-demo
       - run: go run ./cmd/demo -json
       - run: make smoke
       - run: make smoke-network
@@ -23,8 +29,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: settlement-evidence
+          name: assetrail-evidence
           path: |
+            reports/assetrail/
             reports/evidence/
             reports/consensus/
             reports/bft/

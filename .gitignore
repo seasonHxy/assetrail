@@ -20,3 +20,9 @@ __pycache__/
 
 # Keep the active workflow local until GitHub workflow permission is granted.
 /.github/workflows/ci.yml
+
+# AssetRail local L1 artifacts and development network
+/contracts/out/
+/contracts/cache/
+/contracts/broadcast/
+/.assetrail/
